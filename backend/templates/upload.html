@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Upload de logs{% endblock %}
+
+{% block content %}
+  <h1>Upload de fichiers de logs</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for msg in messages %}
+          <li>{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <form method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv,.json">
+    <button type="submit">Uploader</button>
+  </form>
+{% endblock %}

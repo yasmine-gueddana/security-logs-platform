@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Alertes de sécurité{% endblock %}
+
+{% block content %}
+  <h1>Alertes de sécurité</h1>
+
+  {% if alerts %}
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>IP</th>
+          <th>Nb LOGIN_FAILED</th>
+          <th>Fenêtre</th>
+          <th>Date de création (UTC)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in alerts %}
+        <tr>
+          <td>{{ a.type }}</td>
+          <td>{{ a.ip }}</td>
+          <td>{{ a.failures }}</td>
+          <td>{{ a.window }}</td>
+          <td>{{ a.created_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Aucune alerte enregistrée pour le moment.</p>
+  {% endif %}
+{% endblock %}

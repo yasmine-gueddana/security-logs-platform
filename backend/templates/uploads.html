@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Historique des uploads{% endblock %}
+
+{% block content %}
+  <h1>Historique des fichiers uploadés</h1>
+
+  {% if uploads %}
+    <table border="1" cellpadding="5">
+      <thead>
+        <tr>
+          <th>Nom du fichier</th>
+          <th>Taille (octets)</th>
+          <th>Date d'upload (UTC)</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in uploads %}
+        <tr>
+          <td>{{ u.filename }}</td>
+          <td>{{ u.size }}</td>
+          <td>{{ u.uploaded_at }}</td>
+          <td>{{ u.source }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Aucun upload enregistré pour le moment.</p>
+  {% endif %}
+{% endblock %}

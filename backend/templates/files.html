@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Historique des uploads{% endblock %}
+
+{% block content %}
+  <h1>Liste des fichiers de logs</h1>
+
+  {% if files %}
+    <table border="1" cellpadding="5">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Taille (octets)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in files %}
+        <tr>
+          <td>{{ f.name }}</td>
+          <td>{{ f.size }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Aucun fichier trouvé dans le dossier de logs.</p>
+  {% endif %}
+{% endblock %}

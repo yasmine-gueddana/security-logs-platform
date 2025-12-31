@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Security Logs Platform{% endblock %}</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --card-bg: #ffffff;
+      --danger: #b91c1c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    /* Barre de navigation */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #0f172a; /* bleu très foncé */
+      color: #e5e7eb;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.3);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand {
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.03em;
+    }
+
+    .nav-links a {
+      margin-right: 12px;
+      text-decoration: none;
+      color: #cbd5f5;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 4px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(37, 99, 235, 0.35);
+      color: #f9fafb;
+    }
+
+    .user-info {
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .user-info a {
+      color: #93c5fd;
+      text-decoration: none;
+      margin-left: 6px;
+    }
+
+    .user-info a:hover {
+      text-decoration: underline;
+    }
+
+    /* Contenu principal */
+    .page {
+      max-width: 1100px;
+      margin: 22px auto 40px;
+      padding: 0 16px;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 24px;
+    }
+
+    h2 {
+      margin-top: 18px;
+      font-size: 18px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+      margin-bottom: 16px;
+    }
+
+    .info {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Tableaux */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 14px;
+      background: #ffffff;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    thead {
+      background: #f3f4f6;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    tbody tr:hover {
+      background: #eef2ff;
+    }
+
+    th {
+      font-weight: 600;
+      font-size: 13px;
+      color: #374151;
+    }
+
+    /* Boutons / liens d’action */
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      background: var(--primary);
+      color: #ffffff;
+      transition: background 0.15s, transform 0.05s;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: #6b7280;
+    }
+
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+
+    .badge-danger {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: var(--danger);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Flash messages (optionnel si tu les utilises) */
+    .flash {
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .flash-info { background: #e0f2fe; color: #0369a1; }
+    .flash-success { background: #dcfce7; color: #15803d; }
+    .flash-error { background: #fee2e2; color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand">Security Logs Platform</div>
+      <nav class="nav-links">
+        <a href="{{ url_for('index') }}">Accueil</a>
+        <a href="{{ url_for('upload_file') }}">Upload</a>
+        <a href="{{ url_for('list_files') }}">Fichiers</a>
+        <a href="{{ url_for('list_uploads') }}">Historique uploads</a>
+        <a href="{{ url_for('search_logs') }}">Recherche</a>
+        <a href="{{ url_for('list_alerts') }}">Alertes</a>
+        <a href="{{ url_for('stats') }}">Stats</a>
+      </nav>
+    </div>
+
+    <div class="user-info">
+      {% if session.get('user') %}
+        Connecté : {{ session.user }} ({{ session.role }}) |
+        <a href="{{ url_for('logout') }}">Déconnexion</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Connexion</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="page">
+    {# Si tu utilises flash() dans Flask, tu peux décommenter ce bloc #}
+    {#
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="card">
+          {% for msg in messages %}
+            <div class="flash flash-info">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    #}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

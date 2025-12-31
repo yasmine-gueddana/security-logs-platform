@@ -1,0 +1,12 @@
+# Données persistantes des conteneurs
+data/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Divers
+.env
+*.log

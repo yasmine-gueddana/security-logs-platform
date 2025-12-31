@@ -1,0 +1,4 @@
+flask==3.0.3
+elasticsearch==8.15.1
+pymongo==4.10.1
+redis==5.0.8

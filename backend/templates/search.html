@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Recherche de logs{% endblock %}
+
+{% block content %}
+  <h1>Recherche de logs de sécurité</h1>
+
+  <p class="info">
+    Exemples de recherches :
+    - IP : 203.0.113.50
+    - Utilisateur : alice, bob
+    - Action : LOGIN_FAILED, ACCESS_DENIED
+    - Texte libre : Invalid password, Unauthorized access.
+  </p>
+
+  <form method="post" action="{{ url_for('search_logs') }}">
+    <input type="text" name="q" value="{{ query }}" placeholder="IP, username, message..." size="40">
+
+    <select name="action">
+      <option value="">-- Toutes les actions --</option>
+      <option value="LOGIN_FAILED" {% if action == 'LOGIN_FAILED' %}selected{% endif %}>LOGIN_FAILED</option>
+      <option value="LOGIN_SUCCESS" {% if action == 'LOGIN_SUCCESS' %}selected{% endif %}>LOGIN_SUCCESS</option>
+      <option value="ACCESS_DENIED" {% if action == 'ACCESS_DENIED' %}selected{% endif %}>ACCESS_DENIED</option>
+      <option value="BRUTE_FORCE" {% if action == 'BRUTE_FORCE' %}selected{% endif %}>BRUTE_FORCE</option>
+    </select>
+
+    De: <input type="datetime-local" name="from_time" value="{{ from_time }}">
+    À: <input type="datetime-local" name="to_time" value="{{ to_time }}">
+
+    <button type="submit">Rechercher</button>
+    <a href="{{ url_for('run_alerts') }}"><button type="button">Lancer la détection d'alertes</button></a>
+  </form>
+
+  {% if results %}
+    <h2>Résultats ({{ results|length }})</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Level</th>
+          <th>Action</th>
+          <th>Username</th>
+          <th>IP</th>
+          <th>Pays</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+        <tr>
+          <td>{{ r.timestamp }}</td>
+          <td>{{ r.level }}</td>
+          <td>{{ r.action }}</td>
+          <td>{{ r.username }}</td>
+          <td>{{ r.ip }}</td>
+          <td>{{ r.country }}</td>
+          <td>{{ r.message }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% elif query or action or from_time or to_time %}
+    <p>Aucun résultat pour ces filtres.</p>
+  {% endif %}
+{% endblock %}

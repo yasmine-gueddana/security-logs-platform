@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+  <h1>Connexion</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for msg in messages %}
+          <li>{{ msg }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <form method="post">
+    <label>Utilisateur:
+      <input type="text" name="username">
+    </label><br><br>
+    <label>Mot de passe:
+      <input type="password" name="password">
+    </label><br><br>
+    <button type="submit">Se connecter</button>
+  </form>
+{% endblock %}
